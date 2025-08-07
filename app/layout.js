@@ -20,7 +20,7 @@ export const metadata = {
   description: "Blog for the use Pandemandium",
 };
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ children, Component, pageProps }) {
   return (
     <html lang="en">
       <body
