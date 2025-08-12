@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: "Pandemandium",
-  description: "Blog for the use Pandemandium",
+  description: "Blog for the user Pandemandium",
 };
 
 export default function RootLayout({ children, Component, pageProps }) {

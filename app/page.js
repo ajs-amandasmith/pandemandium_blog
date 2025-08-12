@@ -11,10 +11,8 @@ export default async function Home() {
   return (
     <div className="container mx-auto px-10 mb-8">
       <div className='grid grid-cols-1 lg:grid-cols-12 gap-12'>
-        <div>
           <div className='col-span-1 lg:col-span-8'>
-            {posts.map((post) => <PostCard post={post.node} key={post.title} />)} 
-          </div>
+            {posts.map((post) => <PostCard post={post.node} key={post.node.slug} />)} 
         </div>
         <div className='col-span-1 lg:col-span-4'>
           <div className='relative top-8 lg:sticky'>
