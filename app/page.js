@@ -1,10 +1,6 @@
 import { PostCard, Categories, PostWidget } from './components';
 import { getPosts } from '../services';
 
-// const posts = [
-//   { title: 'React Testing', excerpt: 'Learn React Testing' },
-//   { title: 'React with Tailwind', excerpt: 'Learn React with Tailwind' }
-// ]
 
 export default async function Home() {
   const posts = (await getPosts()) || []
@@ -26,10 +22,3 @@ export default async function Home() {
   );
 }
 
-// export async function getStaticProps() {
-//   const posts = (await getPosts()) || [];
-
-//   return {
-//     props: { posts }
-//   }
-// }
