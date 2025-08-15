@@ -11,37 +11,26 @@ const graphQLClient = new GraphQLClient(graphqlAPI, {
 
 export const getPosts = async () => {
   const query = gql`
-    query GetPosts {
+    query MyQuery {
       postsConnection {
         edges {
           node {
-            author {
-              bio
-              id
-              name
-              photo {
-                url
-              }
-            }
+            author { bio id name photo { url } }
             createdAt
             slug
             title
             excerpt
-            category {
-              slug
-              name
-            }
-            featuredImage {
-              url
-            }
+            category { slug name }
+            featuredImage { url }
           }
         }
       }
     }
   `;
   const result = await graphQLClient.request(query);
-  return result.postsConnection.edges.map(edge => edge.node); // flatten nodes
+  return result.postsConnection.edges.map(edge => edge.node);
 };
+
 
 export const getPostDetails = async (slug) => {
   const query = gql`
