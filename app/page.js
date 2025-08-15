@@ -1,6 +1,8 @@
 import { PostCard, Categories, PostWidget } from './components';
 import { getPosts } from '../services';
 
+export const revalidate = 0; // always fetch fresh data on each request
+
 export default async function Home() {
   const posts = (await getPosts()) || [];
   console.log('Posts fetched for home page:', posts);
