@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import moment from 'moment'
 import Link from 'next/link'
 
@@ -8,26 +8,33 @@ import { getRecentPosts, getSimilarPosts } from '../../services'
 function PostWidget({ categories = [], slug }) {
   const [relatedPosts, setRelatedPosts] = useState([])
 
+  // Memoize categories to prevent creating a new array every render
+  const categorySlugs = useMemo(() => categories.filter(Boolean), [categories])
+
   useEffect(() => {
-    if (slug) {
-      // Make sure categories array only has valid slugs
-      const categorySlugs = categories.filter(Boolean)
-      if (categorySlugs.length) {
-        getSimilarPosts(categorySlugs, slug)
-          .then((result) => setRelatedPosts(result))
-      } else {
-        // fallback to recent posts if no categories
-        getRecentPosts().then((result) => setRelatedPosts(result))
+    const fetchPosts = async () => {
+      try {
+        let result = []
+
+        if (slug && categorySlugs.length) {
+          result = await getSimilarPosts(categorySlugs, slug)
+        } else {
+          result = await getRecentPosts()
+        }
+
+        setRelatedPosts(result)
+      } catch (error) {
+        console.error('Error fetching posts:', error)
       }
-    } else {
-      getRecentPosts().then((result) => setRelatedPosts(result))
     }
-  }, [slug, categories])
+
+    fetchPosts()
+  }, [slug, categorySlugs.join()]) // join array for stable dependency
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-8 mb-8">
       <h3 className="text-xl mb-8 font-semibold border-b pb-4">
-        {slug ? 'Related Posts' : "Recent Posts"}
+        {slug ? 'Related Posts' : 'Recent Posts'}
       </h3>
       {relatedPosts.map((post) => (
         <div key={post.slug} className="flex items-center w-full mb-4">

@@ -5,14 +5,16 @@ import { getPostDetails } from '../../../services';
 import { PostDetail, Categories, PostWidget, Author, Comments, CommentsForm } from '../../components'
 
 
-export default async function PostPage({ params }) {
+export default async function PostPage({ params: maybeParams }) {
+  const params = await maybeParams;
   const post = await getPostDetails(params.slug)
+  const categorySlugs = post.category ? [post.category.slug] : [];
+
 
   if (!post) {
     notFound()
   }
-
-  console.log(post)
+console.log(post)
   return (
     <div className="container mx-auto px-10 mb-8">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
@@ -24,7 +26,7 @@ export default async function PostPage({ params }) {
         </div>
         <div className="col-span-1 lg:col-span-4">
           <div className="relative lg:sticky top-8">
-            <PostWidget slug={post.slug} categories={post.category ? [post.category.slug] : []} />
+            <PostWidget slug={post.slug} categories={categorySlugs ? [post.category.slug] : []} />
             <Categories />
           </div>
         </div>

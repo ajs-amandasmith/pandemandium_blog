@@ -10,10 +10,25 @@ import { getCategories } from '../../services'
 const Header = () => {
   const [categories, setCategories] = useState([]);
   
+  // useEffect(() => {
+  //   getCategories()
+  //     .then((newCategories) => setCategories(newCategories))
+  // })
+
   useEffect(() => {
-    getCategories()
-      .then((newCategories) => setCategories(newCategories))
-  })
+      const fetchCategories = async () => {
+        try {
+          const res = await fetch('/api/categories');
+          if (!res.ok) throw new Error('Failed to fetch categories');
+          const data = await res.json();
+          setCategories(data);
+        } catch (err) {
+          console.error(err);
+        }
+      };
+  
+      fetchCategories();
+    }, []);
 
   return (
     <div className="container mx-auto px-10 mb-8">
