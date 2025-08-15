@@ -1,4 +1,4 @@
-import { GraphQLClient, gql } from 'graphql-request';
+import { GraphQLClient, gql, request } from 'graphql-request';
 
 const graphqlAPI = process.env.NEXT_PUBLIC_GRAPHCMS_ENDPOINT;
 
@@ -151,3 +151,33 @@ export const getRecentPosts = async () => {
   if (!res.ok) throw new Error('Failed to fetch recent posts');
   return res.json();
 };
+
+export const getCategoryPost = async (slug) => {
+  const query = gql`
+    query GetCategoryPost($slug: String!) {
+      posts(where: { category_some: { slug: $slug } }) {
+        title
+        slug
+        featuredImage {
+          url
+        }
+        createdAt
+        author {
+          name
+          photo {
+          url
+          }
+        }
+      }
+    }
+  `;
+
+  try {
+    const result = await request(graphqlAPI, query, { slug });
+    return result.posts || [];
+  } catch (err) {
+    console.error("Error in getCategoryPost:", err);
+    return [];
+  }
+};
+
